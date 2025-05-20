@@ -26,7 +26,7 @@ Este código pode ser testado em simuladores como:
 
 ## 📁 Arquivos
 
-- `Semaforo.vhdl`: Código-fonte VHDL do projeto.
+- `VHDL`: Código-fonte VHDL do projeto.
 
 ## 📄 Licença
 
