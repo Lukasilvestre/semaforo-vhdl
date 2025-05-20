@@ -1,0 +1,97 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Semaforo is
+    Port (
+        clk     : in STD_LOGIC;                         -- Clock
+        reset   : in STD_LOGIC;                         -- Reset
+        sem1    : out STD_LOGIC_VECTOR(2 downto 0);     -- Semáforo 1 
+        sem2    : out STD_LOGIC_VECTOR(2 downto 0);     -- Semáforo 2
+        sem3    : out STD_LOGIC_VECTOR(2 downto 0)      -- Semáforo 3 
+    );
+end Semaforo;
+
+architecture Behavioral of Semaforo is
+
+    type state_type is (verde, amarelo, vermelho); 
+    signal state1, state2, state3 : state_type := vermelho;
+    signal counter1, counter2, counter3 : integer := 0;
+
+    constant TIME_MAX : integer := 10; 
+
+begin
+
+    -- Semáforo 1
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state1 <= vermelho;
+            counter1 <= 0;
+        elsif rising_edge(clk) then
+            if counter1 < TIME_MAX then
+                counter1 <= counter1 + 1;
+            else
+                counter1 <= 0;
+                case state1 is
+                    when verde    => state1 <= amarelo;
+                    when amarelo => state1 <= vermelho;
+                    when vermelho => state1 <= verde;
+                end case;
+            end if;
+        end if;
+    end process;
+
+    -- Semáforo 2
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state2 <= vermelho;
+            counter2 <= 0;
+        elsif rising_edge(clk) then
+            if counter2 < TIME_MAX then
+                counter2 <= counter2 + 1;
+            else
+                counter2 <= 0;
+                case state2 is
+                    when verde    => state2 <= amarelo;
+                    when amarelo => state2 <= vermelho;
+                    when vermelho => state2 <= verde;
+                end case;
+            end if;
+        end if;
+    end process;
+
+    -- Semáforo 3
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            state3 <= vermelho;
+            counter3 <= 0;
+        elsif rising_edge(clk) then
+            if counter3 < TIME_MAX then
+                counter3 <= counter3 + 1;
+            else
+                counter3 <= 0;
+                case state3 is
+                    when verde    => state3 <= amarelo;
+                    when amarelo => state3 <= vermelho;
+                    when vermelho => state3 <= verde;
+                end case;
+            end if;
+        end if;
+    end process;
+
+    -- LEDs
+    sem1 <= "100" when state1 = verde else
+            "010" when state1 = amarelo else    
+            "001"; 
+
+    sem2 <= "100" when state2 = verde else
+            "010" when state2 = amarelo else
+            "001";
+
+    sem3 <= "100" when state3 = verde else
+            "010" when state3 = amarelo else
+            "001";
+
+end Behavioral;
